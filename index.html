@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Артём Корыткин — репетитор по Python, дизайну и 3D-моделированию</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@600;700;800&display=swap');
+
+  :root{
+    --bg:#0d0a1f;
+    --bg-2:#140b2e;
+    --violet:#6d2fb5;
+    --magenta:#c026a8;
+    --fuchsia:#e839c5;
+    --cyan:#22d3ee;
+    --electric:#3b7dff;
+    --ink:#f4f1ff;
+    --muted:#a99fc9;
+    --card:rgba(255,255,255,0.04);
+    --card-brd:rgba(255,255,255,0.09);
+    --radius:20px;
+    --maxw:1120px;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Manrope',system-ui,sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* film grain overlay for that "expensive" depth */
+  body::after{
+    content:"";
+    position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+
+  /* ambient blobs */
+  .blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;z-index:0;pointer-events:none}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(14px);
+    background:rgba(13,10,31,.55);
+    border-bottom:1px solid var(--card-brd);
+  }
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:66px}
+  .logo{font-family:'Unbounded';font-weight:700;font-size:19px;letter-spacing:-.5px}
+  .logo span{background:linear-gradient(90deg,var(--fuchsia),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .nav-links{display:flex;gap:30px;font-size:15px;color:var(--muted);font-weight:500}
+  .nav-links a:hover{color:var(--ink)}
+  .nav-cta{
+    padding:10px 20px;border-radius:100px;font-weight:700;font-size:14px;
+    background:linear-gradient(90deg,var(--magenta),var(--electric));
+    box-shadow:0 6px 22px rgba(192,38,168,.4);
+  }
+  .burger{display:none}
+
+  /* ---------- HERO ---------- */
+  header{position:relative;padding:96px 0 90px;overflow:hidden}
+  .hero-blob-1{width:560px;height:560px;background:var(--violet);top:-140px;left:-160px}
+  .hero-blob-2{width:480px;height:480px;background:var(--magenta);top:40px;right:-160px;opacity:.5}
+  .hero-blob-3{width:360px;height:360px;background:var(--electric);bottom:-160px;left:38%;opacity:.4}
+
+  .hero{position:relative;z-index:2;max-width:840px}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:9px;
+    font-size:13px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;
+    color:var(--cyan);margin-bottom:22px;
+    padding:7px 15px;border:1px solid rgba(34,211,238,.3);border-radius:100px;
+    background:rgba(34,211,238,.07);
+  }
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+  h1{
+    font-family:'Unbounded';font-weight:800;
+    font-size:clamp(40px,6.4vw,74px);line-height:1.02;letter-spacing:-1.5px;
+    margin-bottom:26px;
+  }
+  h1 .accent{background:linear-gradient(100deg,var(--fuchsia) 10%,var(--cyan) 90%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{font-size:clamp(17px,2vw,21px);color:var(--muted);max-width:600px;margin-bottom:38px}
+  .lede b{color:var(--ink);font-weight:600}
+
+  .hero-cta{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:16px 30px;border-radius:100px;font-weight:700;font-size:16px;cursor:pointer;
+    transition:transform .15s ease, box-shadow .2s ease;border:none;font-family:inherit;
+  }
+  .btn-primary{
+    background:linear-gradient(95deg,var(--magenta),var(--electric));color:#fff;
+    box-shadow:0 10px 34px rgba(192,38,168,.45);
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 42px rgba(192,38,168,.6)}
+  .btn-ghost{background:var(--card);border:1px solid var(--card-brd);color:var(--ink)}
+  .btn-ghost:hover{background:rgba(255,255,255,.08)}
+
+  .hero-meta{display:flex;gap:34px;margin-top:46px;flex-wrap:wrap}
+  .hero-meta div{}
+  .hero-meta .num{font-family:'Unbounded';font-weight:700;font-size:30px;line-height:1;
+    background:linear-gradient(90deg,var(--fuchsia),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero-meta .lbl{font-size:13.5px;color:var(--muted);margin-top:7px}
+
+  /* ---------- SECTION SHELL ---------- */
+  section{position:relative;padding:88px 0}
+  .sec-head{margin-bottom:52px;max-width:640px}
+  .kicker{font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--fuchsia);margin-bottom:14px}
+  h2{font-family:'Unbounded';font-weight:700;font-size:clamp(29px,4vw,44px);letter-spacing:-1px;line-height:1.08}
+  .sec-head p{color:var(--muted);font-size:17px;margin-top:16px}
+
+  /* ---------- SUBJECTS ---------- */
+  .subjects{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;position:relative;z-index:2;align-items:stretch}
+  .subj{
+    position:relative;padding:34px 30px;border-radius:var(--radius);
+    background:var(--card);border:1px solid var(--card-brd);
+    overflow:hidden;display:flex;flex-direction:column;
+    box-shadow:0 4px 20px rgba(0,0,0,.15);
+    transition:transform .28s cubic-bezier(.2,.7,.3,1),border-color .28s ease,box-shadow .28s ease;
+  }
+  .subj:hover{transform:translateY(-8px);border-color:rgba(232,57,197,.5);
+    box-shadow:0 22px 50px rgba(109,47,181,.35)}
+  .subj::before{
+    content:"";position:absolute;width:190px;height:190px;border-radius:50%;
+    filter:blur(55px);opacity:.35;top:-80px;right:-60px;transition:opacity .35s,transform .35s;
+  }
+  .subj.py::before{background:var(--electric)}
+  .subj.dz::before{background:var(--fuchsia)}
+  .subj.td::before{background:var(--magenta)}
+  .subj:hover::before{opacity:.65;transform:scale(1.15)}
+  .subj-ico{
+    width:58px;height:58px;border-radius:16px;display:grid;place-items:center;
+    margin-bottom:22px;position:relative;z-index:2;
+    background:rgba(255,255,255,.06);border:1px solid var(--card-brd);
+    transition:transform .28s cubic-bezier(.2,.7,.3,1);
+  }
+  .subj-ico svg{width:32px;height:32px;display:block}
+  .subj:hover .subj-ico{transform:scale(1.08) rotate(-4deg)}
+  .subj h3{font-family:'Unbounded';font-weight:600;font-size:20px;margin-bottom:11px;position:relative;z-index:2}
+  .subj p{color:var(--muted);font-size:15px;position:relative;z-index:2;flex-grow:1}
+  .subj .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px;position:relative;z-index:2}
+  .tag{font-size:12px;padding:5px 11px;border-radius:100px;background:rgba(255,255,255,.05);border:1px solid var(--card-brd);color:var(--muted)}
+
+  /* ---------- WHY / TRUST ---------- */
+  #why{background:linear-gradient(180deg,transparent,rgba(109,47,181,.08),transparent)}
+  .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .why-card{padding:30px 28px;border-radius:var(--radius);background:var(--card);border:1px solid var(--card-brd)}
+  .why-card .wemoji{width:46px;height:46px;margin-bottom:18px;display:grid;place-items:center;
+    border-radius:13px;background:rgba(255,255,255,.04);border:1px solid var(--card-brd)}
+  .why-card .wemoji svg{width:24px;height:24px;stroke:var(--cyan);stroke-width:1.6;fill:none;
+    stroke-linecap:round;stroke-linejoin:round}
+  .why-card h4{font-family:'Unbounded';font-weight:600;font-size:18px;margin-bottom:9px}
+  .why-card p{color:var(--muted);font-size:15px}
+
+  /* ---------- HOW / STEPS ---------- */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;position:relative;z-index:2}
+  .step{padding:30px 26px;border-radius:var(--radius);background:var(--card);border:1px solid var(--card-brd);position:relative}
+  .step-n{font-family:'Unbounded';font-weight:800;font-size:15px;width:38px;height:38px;border-radius:12px;
+    display:grid;place-items:center;margin-bottom:18px;
+    background:linear-gradient(135deg,var(--magenta),var(--electric));color:#fff}
+  .step h4{font-family:'Unbounded';font-weight:600;font-size:18px;margin-bottom:9px}
+  .step p{color:var(--muted);font-size:15px}
+
+  /* ---------- PRICE ---------- */
+  .price-wrap{position:relative;z-index:2;display:grid;grid-template-columns:1.1fr 1fr;gap:24px;align-items:stretch}
+  .price-card{
+    padding:44px 40px;border-radius:26px;position:relative;overflow:hidden;
+    background:linear-gradient(140deg,rgba(192,38,168,.22),rgba(59,125,255,.14));
+    border:1px solid rgba(232,57,197,.3);
+  }
+  .price-card .free{font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--cyan);margin-bottom:18px}
+  .price-card .amount{font-family:'Unbounded';font-weight:800;font-size:58px;line-height:1;letter-spacing:-2px}
+  .price-card .amount small{font-size:20px;font-weight:600;color:var(--muted);letter-spacing:0}
+  .price-card ul{list-style:none;margin:26px 0 30px;display:flex;flex-direction:column;gap:13px}
+  .price-card li{display:flex;gap:12px;align-items:flex-start;font-size:15.5px;color:var(--ink)}
+  .price-card li .ck{color:var(--cyan);font-weight:800;flex-shrink:0}
+  .price-side{padding:40px 36px;border-radius:26px;background:var(--card);border:1px solid var(--card-brd);display:flex;flex-direction:column;justify-content:center}
+  .price-side h3{font-family:'Unbounded';font-weight:600;font-size:24px;margin-bottom:14px;line-height:1.2}
+  .price-side p{color:var(--muted);font-size:16px;margin-bottom:8px}
+  .price-side .big-free{font-family:'Unbounded';font-weight:800;font-size:34px;
+    background:linear-gradient(90deg,var(--fuchsia),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:6px}
+
+  /* ---------- CONTACT / FORM ---------- */
+  #contact{padding-bottom:96px}
+  .contact-box{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:40px;
+    padding:52px;border-radius:28px;background:linear-gradient(150deg,rgba(109,47,181,.2),rgba(13,10,31,.4));
+    border:1px solid var(--card-brd);overflow:hidden}
+  .contact-blob{width:420px;height:420px;background:var(--magenta);top:-160px;right:-120px;opacity:.35}
+  .contact-left h2{margin-bottom:16px}
+  .contact-left p{color:var(--muted);font-size:16px;margin-bottom:28px}
+  .contact-chips{display:flex;flex-direction:column;gap:12px}
+  .chip{display:flex;align-items:center;gap:14px;padding:15px 18px;border-radius:14px;
+    background:var(--card);border:1px solid var(--card-brd);font-weight:600;
+    transition:transform .25s cubic-bezier(.2,.7,.3,1),border-color .25s ease,box-shadow .25s ease}
+  .chip:hover{border-color:rgba(232,57,197,.4);transform:translateX(6px);box-shadow:0 10px 26px rgba(0,0,0,.22)}
+  .chip .ci{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;flex-shrink:0;
+    background:#fff;transition:transform .25s cubic-bezier(.2,.7,.3,1)}
+  .chip:hover .ci{transform:scale(1.06)}
+  .chip .ci svg{width:24px;height:24px;display:block}
+  .chip .cs{font-size:12.5px;color:var(--muted);font-weight:500}
+
+  form{display:flex;flex-direction:column;gap:15px}
+  form label{font-size:13px;color:var(--muted);font-weight:600;margin-bottom:-8px}
+  input,select,textarea{
+    width:100%;padding:14px 16px;border-radius:12px;font-family:inherit;font-size:15px;
+    background:rgba(255,255,255,.05);border:1px solid var(--card-brd);color:var(--ink);transition:.2s;
+  }
+  input::placeholder,textarea::placeholder{color:#6f6690}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--fuchsia);background:rgba(255,255,255,.08)}
+  select option{background:#1a1030}
+  textarea{resize:vertical;min-height:80px}
+  form .btn-primary{margin-top:6px;justify-content:center}
+  .form-note{font-size:13px;color:var(--muted);text-align:center;margin-top:4px}
+  .ok-msg{display:none;padding:16px;border-radius:12px;background:rgba(34,211,238,.12);
+    border:1px solid rgba(34,211,238,.4);color:var(--cyan);font-weight:600;text-align:center}
+
+  /* ---------- FOOTER ---------- */
+  footer{border-top:1px solid var(--card-brd);padding:34px 0;text-align:center;color:var(--muted);font-size:14px}
+  footer .logo{justify-content:center;margin-bottom:10px;font-size:17px}
+  footer a{color:var(--cyan)}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media(max-width:860px){
+    .nav-links{display:none}
+    .subjects,.why-grid,.steps,.price-wrap,.contact-box{grid-template-columns:1fr}
+    .contact-box{padding:32px 26px}
+    .hero-meta{gap:24px}
+    header{padding:64px 0 60px}
+    section{padding:64px 0}
+    .price-card{padding:34px 28px}
+  }
+  /* ---------- SCROLL REVEAL ---------- */
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.3,1)}
+  .reveal.in{opacity:1;transform:none}
+  .reveal.d1{transition-delay:.08s}
+  .reveal.d2{transition-delay:.16s}
+  .reveal.d3{transition-delay:.24s}
+
+  /* subtle lift on trust + step cards */
+  .why-card,.step{transition:transform .28s cubic-bezier(.2,.7,.3,1),border-color .28s ease,box-shadow .28s ease;
+    box-shadow:0 4px 18px rgba(0,0,0,.14)}
+  .why-card:hover,.step:hover{transform:translateY(-6px);border-color:rgba(232,57,197,.4);
+    box-shadow:0 20px 44px rgba(109,47,181,.3)}
+
+  @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto;transition:none!important;animation:none!important}
+    .reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="wrap nav-in">
+    <div class="logo">Артём<span>.препод</span></div>
+    <div class="nav-links">
+      <a href="#subjects">Предметы</a>
+      <a href="#why">Почему я</a>
+      <a href="#how">Как проходит</a>
+      <a href="#price">Цена</a>
+    </div>
+    <a href="#contact" class="nav-cta">Бесплатный урок</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header>
+  <div class="blob hero-blob-1"></div>
+  <div class="blob hero-blob-2"></div>
+  <div class="blob hero-blob-3"></div>
+  <div class="wrap hero">
+    <span class="eyebrow"><span class="dot"></span>Старший преподаватель IT-академии TOP</span>
+    <h1>Научу <span class="accent">программировать, проектировать и создавать</span> — с нуля до первого проекта</h1>
+    <p class="lede">Индивидуальные занятия по <b>Python, дизайну и 3D-графике</b>. Онлайн, на русском или английском. Объясняю понятно — так, чтобы получалось у любого: и у школьника, и у взрослого.</p>
+    <div class="hero-cta">
+      <a href="#contact" class="btn btn-primary">Записаться на бесплатный урок →</a>
+      <a href="#subjects" class="btn btn-ghost">Что можно изучать</a>
+    </div>
+    <div class="hero-meta">
+      <div><div class="num">2,5 года</div><div class="lbl">преподаю в академии TOP</div></div>
+      <div><div class="num">3 направления</div><div class="lbl">код, дизайн и 3D-графика</div></div>
+      <div><div class="num">1-е занятие</div><div class="lbl">бесплатно — 30 мин, знакомство и план</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- SUBJECTS -->
+<section id="subjects">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Направления</div>
+      <h2>Выбери, чему хочешь научиться</h2>
+      <p>Каждое направление ведём с нуля и под твою цель — школьная программа, олимпиада, портфолио или первый заказ на фрилансе.</p>
+    </div>
+    <div class="subjects">
+      <div class="subj py reveal">
+        <div class="subj-ico">
+          <svg viewBox="0 0 256 255" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="pyA" x1="12.96%" y1="12.04%" x2="79.64%" y2="78.2%"><stop offset="0" stop-color="#387EB8"/><stop offset="1" stop-color="#366994"/></linearGradient><linearGradient id="pyB" x1="19.13%" y1="20.58%" x2="90.74%" y2="88.43%"><stop offset="0" stop-color="#FFE052"/><stop offset="1" stop-color="#FFC331"/></linearGradient></defs><path fill="url(#pyA)" d="M126.916.072c-64.832 0-60.784 28.115-60.784 28.115l.072 29.128h61.868v8.745H41.617S.145 61.355.145 126.77c0 65.417 36.21 63.097 36.21 63.097h21.61v-30.356s-1.165-36.21 35.632-36.21h61.362s34.475.557 34.475-33.319V33.97S224.807.072 126.916.072zM92.802 19.66a11.12 11.12 0 0 1 11.13 11.13 11.12 11.12 0 0 1-11.13 11.13 11.12 11.12 0 0 1-11.13-11.13 11.12 11.12 0 0 1 11.13-11.13z"/><path fill="url(#pyB)" d="M128.757 254.126c64.832 0 60.784-28.115 60.784-28.115l-.072-29.127H127.6v-8.745h86.404s41.472 4.705 41.472-60.712c0-65.416-36.21-63.096-36.21-63.096h-21.61v30.355s1.165 36.21-35.632 36.21h-61.362s-34.475-.557-34.475 33.32v56.013s-5.235 33.897 92.656 33.897zm34.114-19.586a11.12 11.12 0 0 1-11.13-11.13 11.12 11.12 0 0 1 11.13-11.131 11.12 11.12 0 0 1 11.13 11.13 11.12 11.12 0 0 1-11.13 11.13z"/></svg>
+        </div>
+        <h3>Python и программирование</h3>
+        <p>От первой строки кода до собственного проекта. Основы, логика, реальные задачи. Готовлю к школьной информатике и олимпиадам.</p>
+        <div class="tags"><span class="tag">С нуля</span><span class="tag">Школьникам</span><span class="tag">Взрослым</span></div>
+      </div>
+      <div class="subj dz reveal d1">
+        <div class="subj-ico">
+          <svg viewBox="0 0 256 384" xmlns="http://www.w3.org/2000/svg"><path fill="#0ACF83" d="M64 384c35.328 0 64-28.672 64-64v-64H64c-35.328 0-64 28.672-64 64s28.672 64 64 64z"/><path fill="#A259FF" d="M0 192c0-35.328 28.672-64 64-64h64v128H64c-35.328 0-64-28.672-64-64z"/><path fill="#F24E1E" d="M0 64C0 28.672 28.672 0 64 0h64v128H64C28.672 128 0 99.328 0 64z"/><path fill="#FF7262" d="M128 0h64c35.328 0 64 28.672 64 64s-28.672 64-64 64h-64V0z"/><path fill="#1ABCFE" d="M256 192c0 35.328-28.672 64-64 64s-64-28.672-64-64 28.672-64 64-64 64 28.672 64 64z"/></svg>
+        </div>
+        <h3>Дизайн в Figma</h3>
+        <p>Интерфейсы, баннеры, карточки для маркетплейсов, презентации. Научу видеть красиво и собирать макеты, которые продают.</p>
+        <div class="tags"><span class="tag">Figma</span><span class="tag">UI/UX</span><span class="tag">Векторная графика</span></div>
+      </div>
+      <div class="subj td reveal d2">
+        <div class="subj-ico">
+          <svg viewBox="0 0 256 226" xmlns="http://www.w3.org/2000/svg"><path d="M126.833 91.4c.518-9.328 5.076-17.529 12.084-23.376 6.86-5.723 15.91-9.21 25.807-9.21 9.897 0 18.947 3.487 25.807 9.21 7.008 5.847 11.566 14.048 12.084 23.376.53 9.562-3.316 18.42-10.03 24.977-6.855 6.694-16.512 10.89-27.861 10.89-11.35 0-21.006-4.196-27.861-10.89-6.714-6.557-10.56-15.415-10.03-24.977z" fill="#265787"/><path d="M79.3 143.09c.104 1.855.706 5.487 1.58 8.34 1.855 6.05 5.008 11.663 9.44 16.66 4.545 5.123 10.222 9.24 16.86 12.166 6.982 3.077 14.687 4.663 22.72 4.65 8.034-.013 15.735-1.63 22.702-4.732 6.63-2.954 12.293-7.1 16.816-12.246 4.415-5.017 7.545-10.646 9.375-16.705.923-3.06 1.5-6.184 1.717-9.334.213-3.093.077-6.213-.4-9.322-.933-6.055-3.088-11.767-6.36-16.985-3.005-4.797-6.9-8.98-11.502-12.42l.005-.005-52.02-39.93c-.045-.035-.088-.07-.134-.103-3.043-2.335-8.163-2.328-11.52.02-3.396 2.375-3.782 6.293-.777 8.766l-.005.005 21.703 17.653-66.152.07h-.088c-4.866.006-9.542 3.198-10.49 7.283-.966 4.158 2.396 7.616 7.55 7.626l-.002.01 33.53-.068-59.86 45.966c-.076.057-.153.113-.228.173-5.104 3.916-6.75 10.408-3.53 14.512 3.273 4.17 10.226 4.175 15.377.006l32.62-26.706s-.475 3.63-.372 5.485l.13-.001zm71.554 15.375c-5.876 5.988-14.075 9.312-22.994 9.325-8.928.014-17.132-3.28-23.018-9.248-2.876-2.916-5.014-6.29-6.35-9.925-1.31-3.573-1.784-7.386-1.354-11.19.42-3.72 1.686-7.226 3.68-10.365 1.958-3.08 4.622-5.827 7.83-8.077 6.29-4.406 14.29-6.766 22.65-6.767 8.36-.001 16.36 2.358 22.65 6.767 3.208 2.25 5.872 4.997 7.83 8.077 1.994 3.139 3.26 6.645 3.68 10.365.43 3.804-.044 7.617-1.354 11.19-1.336 3.635-3.474 7.01-6.35 9.925l-.001-.001z" fill="#EA7600"/></svg>
+        </div>
+        <h3>3D-моделирование в Blender</h3>
+        <p>Моделирование, текстуры, анимация, рендер. Сделаешь первую 3D-сцену уже на первых занятиях и поймёшь всю логику.</p>
+        <div class="tags"><span class="tag">Blender</span><span class="tag">Анимация</span><span class="tag">Рендер</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section id="why">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Почему со мной</div>
+      <h2>Не просто «знаю предмет» — умею научить</h2>
+      <p>Многие знают Python или Figma. Но объяснить так, чтобы зажечь и удержать интерес, — отдельный навык. Я легко нахожу общий язык с учениками любого возраста, и именно за это меня выбирают: со мной не скучно, не страшно ошибаться и видно результат.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <span class="wemoji"><svg viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1 2.7 2.5 6 2.5s6-1.5 6-2.5v-5"/><path d="M22 10v6"/></svg></span>
+        <h4>Действующий преподаватель</h4>
+        <p>2,5 года веду курсы в компьютерной академии TOP по дизайну, 3D, веб-разработке и программированию. Это моя ежедневная работа, а не хобби.</p>
+      </div>
+      <div class="why-card reveal d1">
+        <span class="wemoji"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="m9 14.5-2 6.5 5-3 5 3-2-6.5"/><path d="m12 6 1.2 2.4 2.6.4-1.9 1.8.4 2.6-2.3-1.2-2.3 1.2.4-2.6L9 8.8l2.6-.4L12 6Z"/></svg></span>
+        <h4>Опыт в госпрограмме</h4>
+        <p>Преподавал школьникам 8–11 классов Python по программе «Код будущего» от Министерства образования РФ. Знаю, как объяснять детям сложное просто.</p>
+      </div>
+      <div class="why-card reveal d2">
+        <span class="wemoji"><svg viewBox="0 0 24 24"><path d="M8 10.5h.01M12 10.5h.01M16 10.5h.01"/><path d="M4 5h16a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1Z"/></svg></span>
+        <h4>Легко нахожу контакт</h4>
+        <p>За плечами годы работы с детьми и сцены — умею удержать внимание и объяснить так, чтобы было интересно. Веду занятия на русском и английском.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section id="how">
+  <div class="blob" style="width:400px;height:400px;background:var(--violet);opacity:.3;left:-140px;top:20%"></div>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Как проходит обучение</div>
+      <h2>Три простых шага до результата</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-n">1</div>
+        <h4>Бесплатное знакомство</h4>
+        <p>Созваниваемся на 30 минут, определяем твой уровень и цель, составляем понятный план занятий. Ни к чему не обязывает.</p>
+      </div>
+      <div class="step reveal d1">
+        <div class="step-n">2</div>
+        <h4>Занятия под тебя</h4>
+        <p>Часовые уроки онлайн в удобное время. Учимся на реальных задачах, без скучной зубрёжки. Темп подстраиваю под тебя.</p>
+      </div>
+      <div class="step reveal d2">
+        <div class="step-n">3</div>
+        <h4>Первый результат</h4>
+        <p>Свой проект, готовый макет, работающий код или сданная тема — то, что можно показать, применить или положить в портфолио.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICE -->
+<section id="price">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Стоимость</div>
+      <h2>Прозрачно и без сюрпризов</h2>
+    </div>
+    <div class="price-wrap">
+      <div class="price-card">
+        <div class="free">Одно занятие</div>
+        <div class="amount">1500 ₽ <small>/ 60 минут</small></div>
+        <ul>
+          <li><span class="ck">✓</span> Индивидуально, один на один</li>
+          <li><span class="ck">✓</span> Любое из 3 направлений на выбор</li>
+          <li><span class="ck">✓</span> Онлайн, на русском или английском</li>
+          <li><span class="ck">✓</span> Работаю официально как самозанятый — чек после оплаты</li>
+        </ul>
+        <a href="#contact" class="btn btn-primary" style="justify-content:center">Записаться →</a>
+      </div>
+      <div class="price-side">
+        <div class="big-free">Первый урок — бесплатно</div>
+        <h3>Начни без риска</h3>
+        <p>Первое занятие — это знакомство на 30 минут: определяем уровень, цель и план. Ты ничем не рискуешь и сам решаешь, продолжать ли.</p>
+        <p style="margin-top:14px;color:var(--ink);font-weight:600">Подходит и детям, и взрослым — по любой дисциплине.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-box">
+      <div class="blob contact-blob"></div>
+      <div class="contact-left">
+        <div class="kicker">Запись</div>
+        <h2>Записаться на бесплатный урок</h2>
+        <p>Оставь заявку или напиши напрямую — отвечу и предложу удобное время. Обычно на связи в течение дня.</p>
+        <div class="contact-chips">
+          <a class="chip" href="https://t.me/curlyyzzz" target="_blank" rel="noopener">
+            <span class="ci"><svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="tg" x1="50%" x2="50%" y1="0%" y2="100%"><stop offset="0" stop-color="#2AABEE"/><stop offset="1" stop-color="#229ED9"/></linearGradient></defs><circle cx="120" cy="120" r="120" fill="url(#tg)"/><path fill="#fff" d="M53.5 118.7c35-15.2 58.3-25.3 70-30.2 33.3-13.9 40.2-16.3 44.7-16.4 1 0 3.2.2 4.7 1.4 1.2 1 1.5 2.3 1.7 3.3.2 1 .4 3.1.2 4.8-1.8 19.3-9.7 66.1-13.7 87.7-1.7 9.1-5 12.2-8.2 12.5-7 .6-12.3-4.6-19-9-10.5-6.9-16.4-11.2-26.6-17.9-11.8-7.8-4.2-12 2.6-19 1.8-1.8 32.5-29.8 33.1-32.3.1-.3.1-1.5-.6-2.1-.7-.6-1.7-.4-2.5-.2-1.1.2-18.9 12-53.6 35.3-5.1 3.5-9.7 5.2-13.8 5.1-4.5-.1-13.3-2.6-19.8-4.7-8-2.6-14.3-4-13.8-8.4.3-2.3 3.4-4.6 9.2-7.1z"/></svg></span><div>Telegram<div class="cs">@curlyyzzz — самый быстрый способ</div></div>
+          </a>
+          <a class="chip" href="https://wa.me/" target="_blank" rel="noopener" id="waLink">
+            <span class="ci"><svg viewBox="0 0 256 258" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="wa" x1="50%" x2="50%" y1="0%" y2="100%"><stop offset="0" stop-color="#61FD7D"/><stop offset="1" stop-color="#2BB826"/></linearGradient></defs><path fill="url(#wa)" d="M5.463 127.456c-.006 21.677 5.658 42.843 16.428 61.499L4.433 252.697l65.232-17.104a123 123 0 0 0 58.8 14.97h.054c67.815 0 123.018-55.183 123.047-123.01.013-32.867-12.775-63.773-36.009-87.025-23.23-23.25-54.125-36.061-87.043-36.076-67.823 0-123.022 55.18-123.05 123.004"/><path fill="#FFF" d="M100.134 73.307c-1.755-3.9-3.601-3.978-5.27-4.046-1.365-.059-2.927-.055-4.487-.055-1.56 0-4.095.587-6.238 2.927-2.145 2.34-8.19 8.0-8.19 19.51 0 11.512 8.385 22.633 9.554 24.194 1.17 1.56 16.185 25.93 39.964 35.318 19.767 7.8 23.784 6.249 28.072 5.86 4.29-.39 13.84-5.66 15.79-11.12 1.95-5.46 1.95-10.14 1.365-11.12-.585-.975-2.145-1.56-4.485-2.73-2.34-1.17-13.84-6.83-15.985-7.61-2.145-.78-3.705-1.17-5.265 1.172-1.56 2.34-6.04 7.606-7.41 9.166-1.365 1.56-2.73 1.755-5.07.585-2.34-1.17-9.87-3.64-18.795-11.6-6.945-6.194-11.64-13.845-13.005-16.185-1.365-2.34-.145-3.606 1.028-4.772 1.052-1.048 2.34-2.73 3.51-4.095 1.17-1.365 1.56-2.34 2.34-3.9.78-1.56.39-2.925-.195-4.095-.585-1.17-5.13-12.74-7.215-17.394"/></svg></span><div>WhatsApp<div class="cs">Написать в мессенджере</div></div>
+          </a>
+          <a class="chip" href="mailto:curlyyzzz@gmail.com">
+            <span class="ci"><svg viewBox="0 0 256 193" xmlns="http://www.w3.org/2000/svg"><path fill="#4285F4" d="M58.182 192.05V93.14L27.507 65.077 0 49.504v125.091c0 9.658 7.825 17.455 17.455 17.455z"/><path fill="#34A853" d="M197.818 192.05h40.727c9.659 0 17.455-7.826 17.455-17.455v-125.09l-31.156 17.837-27.026 27.798z"/><path fill="#EA4335" d="M58.182 93.14l-4.174-38.647 4.174-36.989L128 69.868l69.818-52.364 4.669 34.992-4.669 40.644L128 145.505z"/><path fill="#FBBC04" d="M197.818 17.504V93.14L256 49.504V26.231c0-21.585-24.64-33.89-41.89-20.945z"/><path fill="#C5221F" d="M0 49.504l26.759 20.07L58.182 93.14V17.504L41.89 5.286C24.61-7.66 0 4.646 0 26.23z"/></svg></span><div>Email<div class="cs">curlyyzzz@gmail.com</div></div>
+          </a>
+        </div>
+      </div>
+      <div class="contact-right">
+        <form id="leadForm">
+          <label for="name">Как тебя зовут</label>
+          <input type="text" id="name" placeholder="Имя" required>
+          <label for="subj">Что хочешь изучать</label>
+          <select id="subj" required>
+            <option value="" disabled selected>Выбери направление</option>
+            <option>Python / программирование</option>
+            <option>Дизайн в Figma</option>
+            <option>3D в Blender</option>
+            <option>Пока не определился(лась)</option>
+          </select>
+          <label for="contactm">Как с тобой связаться</label>
+          <input type="text" id="contactm" placeholder="Telegram, телефон или email" required>
+          <label for="msg">Комментарий (необязательно)</label>
+          <textarea id="msg" placeholder="Цель, уровень, удобное время — что угодно"></textarea>
+          <button type="submit" class="btn btn-primary">Отправить заявку</button>
+          <div class="form-note">Нажимая кнопку, ты соглашаешься на обработку данных для связи</div>
+          <div class="ok-msg" id="okMsg">Заявка принята! Свяжусь с тобой в ближайшее время ✨</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="logo">Артём<span>.препод</span></div>
+    <p>Репетитор по Python, дизайну и 3D · Онлайн · RU / EN</p>
+    <p style="margin-top:8px"><a href="https://www.behance.net/gallery/228284729/portfolio" target="_blank" rel="noopener">Портфолио на Behance →</a></p>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:.14, rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // Contact form — front-end only demo. Wire up to Telegram/email backend when hosting.
+  const form = document.getElementById('leadForm');
+  const okMsg = document.getElementById('okMsg');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const subj = document.getElementById('subj').value;
+    const contactm = document.getElementById('contactm').value.trim();
+    const msg = document.getElementById('msg').value.trim();
+    // Prefill a Telegram message so the lead can send it in one tap
+    const text = `Здравствуйте! Хочу записаться на бесплатный урок.%0AИмя: ${encodeURIComponent(name)}%0AНаправление: ${encodeURIComponent(subj)}%0AСвязь: ${encodeURIComponent(contactm)}${msg ? '%0AКомментарий: '+encodeURIComponent(msg) : ''}`;
+    okMsg.style.display = 'block';
+    form.querySelectorAll('input,select,textarea,button').forEach(el=>el.disabled=true);
+    // Open Telegram with prefilled text
+    window.open(`https://t.me/curlyyzzz?text=${text}`, '_blank');
+  });
+</script>
+</body>
+</html>
