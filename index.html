@@ -6,7 +6,7 @@
 <title>Артём Корыткин — репетитор по Python, дизайну и 3D-моделированию</title>
 
 <!-- ===== SEO ===== -->
-<meta name="description" content="Индивидуальные и групповые онлайн-занятия по Python, дизайну в Figma и 3D-моделированию в Blender. Для школьников и взрослых, с нуля. Старший преподаватель IT-академии TOP. Первый урок бесплатно. Группа 1500 ₽, индивидуально 2000 ₽/час, RU/EN.">
+<meta name="description" content="Индивидуальные и групповые онлайн-занятия по Python, дизайну в Figma и 3D-моделированию в Blender. Для детей и взрослых, с нуля. Старший преподаватель IT-академии TOP. Первый урок бесплатно. Группа 1500 ₽, индивидуально 2000 ₽/час, RU/EN.">
 <meta name="keywords" content="репетитор Python, репетитор по программированию, обучение Blender, репетитор по 3D-моделированию, репетитор Figma, дизайн обучение, онлайн репетитор IT, Python для школьников, подготовка к олимпиаде по информатике">
 <meta name="author" content="Артём Корыткин">
 <meta name="robots" content="index, follow">
@@ -17,7 +17,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Артём — репетитор по Python, Figma и Blender">
 <meta property="og:title" content="Репетитор по Python, дизайну и 3D — с нуля до первого проекта">
-<meta property="og:description" content="Онлайн-занятия по Python, Figma и Blender для школьников и взрослых. Старший преподаватель IT-академии TOP. Первый урок бесплатно.">
+<meta property="og:description" content="Онлайн-занятия по Python, Figma и Blender для детей и взрослых. Старший преподаватель IT-академии TOP. Первый урок бесплатно.">
 <meta property="og:locale" content="ru_RU">
 <meta property="og:url" content="https://curlyyzzz.github.io/Resume/">
 <meta property="og:image" content="https://curlyyzzz.github.io/Resume/assets/og-preview.png">
@@ -40,7 +40,7 @@
   "@context": "https://schema.org",
   "@type": "EducationalOrganization",
   "name": "Артём Корыткин — репетитор по Python, Figma и Blender",
-  "description": "Индивидуальные онлайн-занятия по Python, дизайну в Figma и 3D-моделированию в Blender для школьников и взрослых.",
+  "description": "Индивидуальные онлайн-занятия по Python, дизайну в Figma и 3D-моделированию в Blender для детей и взрослых.",
   "url": "https://curlyyzzz.github.io/Resume/",
   "email": "curlyyzzz@gmail.com",
   "areaServed": "RU",
@@ -177,6 +177,44 @@
   .hero-meta .num{font-family:'Unbounded';font-weight:700;font-size:30px;line-height:1;
     background:linear-gradient(90deg,var(--fuchsia),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
   .hero-meta .lbl{font-size:13.5px;color:var(--muted);margin-top:7px}
+  .meta-btn{all:unset;box-sizing:border-box;cursor:pointer;display:block;margin:-12px -16px;padding:12px 16px;border-radius:16px;
+    border:1px dashed rgba(34,211,238,.35);background:rgba(34,211,238,.04);
+    transition:background .2s,border-color .2s,transform .2s cubic-bezier(.2,.7,.3,1)}
+  .meta-btn:hover{background:rgba(34,211,238,.09);border-color:rgba(34,211,238,.6);transform:translateY(-2px)}
+  .meta-btn:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+  .meta-more{display:inline-flex;align-items:center;gap:4px;margin-top:8px;font-size:13px;font-weight:700;color:var(--cyan)}
+  .meta-more svg,.step-more svg{width:15px;height:15px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
+  .meta-btn:hover .meta-more svg,.step-more:hover svg{transform:translateX(3px)}
+  .hero-portfolio{display:inline-flex;align-items:center;gap:9px;margin-top:22px;font-size:15px;font-weight:600;color:var(--muted);
+    border-bottom:1px solid transparent;transition:color .2s,border-color .2s}
+  .hero-portfolio:hover{color:var(--ink);border-color:rgba(255,255,255,.3)}
+  .hero-portfolio svg{width:19px;height:19px;stroke:var(--cyan);stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .hero-portfolio svg.ext{width:15px;height:15px;stroke:currentColor}
+  .step-more{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:4px;margin-top:14px;font-size:14px;font-weight:700;color:var(--cyan)}
+  .step-more:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:4px}
+
+  /* first-lesson dialog */
+  .fl{margin:auto;width:min(560px,calc(100% - 32px));max-height:calc(100% - 32px);overflow:auto;padding:40px 36px 34px;border-radius:26px;
+    color:var(--ink);border:1px solid rgba(232,57,197,.35);
+    background:radial-gradient(circle at 100% 0%,rgba(192,38,168,.28),transparent 55%),radial-gradient(circle at 0% 100%,rgba(59,125,255,.18),transparent 55%),#140b2e;
+    box-shadow:0 30px 90px rgba(109,47,181,.45)}
+  .fl::backdrop{background:rgba(8,6,20,.78);backdrop-filter:blur(8px)}
+  .fl[open]{animation:flIn .28s cubic-bezier(.2,.7,.3,1)}
+  @keyframes flIn{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
+  .fl-close{all:unset;cursor:pointer;position:absolute;top:16px;right:16px;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;
+    background:rgba(255,255,255,.06);border:1px solid var(--card-brd);transition:background .2s}
+  .fl-close:hover{background:rgba(255,255,255,.14)}
+  .fl-close:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+  .fl-close svg{width:20px;height:20px;stroke:var(--ink);stroke-width:2;fill:none;stroke-linecap:round}
+  .fl-kicker{font-size:12.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--cyan);margin-bottom:10px}
+  .fl h3{font-family:'Unbounded';font-weight:700;font-size:26px;line-height:1.15;letter-spacing:-.5px;margin-bottom:22px;padding-right:40px}
+  .fl-list{list-style:none;display:flex;flex-direction:column;gap:14px}
+  .fl-list li{display:flex;gap:14px;align-items:flex-start;font-size:15.5px;line-height:1.5;color:var(--muted)}
+  .fl-list li b{color:var(--ink);font-weight:700}
+  .fl-list svg{flex-shrink:0;width:38px;height:38px;padding:8px;border-radius:11px;background:rgba(255,255,255,.05);border:1px solid var(--card-brd);
+    stroke:var(--cyan);stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .fl-note{margin:22px 0 20px;font-size:14px;color:var(--muted)}
+  .fl-cta{width:100%;justify-content:center}
 
   /* ---------- SECTION SHELL ---------- */
   section{position:relative;padding:88px 0}
@@ -318,6 +356,14 @@
     section{padding:64px 0}
     .price-card{padding:34px 28px}
   }
+  @media(max-width:560px){
+    /* Unbounded is wide: long words («программировать») must fit the screen */
+    h1{font-size:7.3vw;letter-spacing:-.5px;hyphens:auto}
+    .eyebrow{font-size:11px;letter-spacing:.2px;padding:6px 12px}
+    .fl{padding:34px 22px 26px}
+    .fl h3{font-size:22px}
+    .fl-cta{font-size:15px;padding:15px 18px}
+  }
   /* ---------- GALLERY ---------- */
   .gbar{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
   .gtabs{display:flex;gap:10px;flex-wrap:wrap}
@@ -439,6 +485,13 @@
 
   @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto;transition:none!important;animation:none!important}
     .reveal{opacity:1;transform:none}}
+  /* narrowest phones (360px): logo + CTA must share one row — keep after the 480px rules */
+  @media(max-width:380px){
+    .logo{font-size:14px;gap:6px}
+    .logo .mark{width:22px;height:22px}
+    .nav-cta{padding:8px 12px;font-size:12.5px}
+    .hero-cta .btn{padding:15px 20px;font-size:15px}
+  }
 </style>
 </head>
 <body>
@@ -466,15 +519,16 @@
   <div class="wrap hero">
     <span class="eyebrow"><span class="dot"></span>Старший преподаватель IT-академии TOP</span>
     <h1>Научу <span class="accent">программировать, проектировать и создавать</span> — с нуля до первого проекта</h1>
-    <p class="lede">Индивидуальные и групповые занятия по <b>Python, дизайну и 3D-графике</b>. Онлайн, на русском или английском. Объясняю понятно — так, чтобы получалось у любого: и у школьника, и у взрослого.</p>
+    <p class="lede">Индивидуальные и групповые занятия по <b>Python, дизайну и 3D-графике</b>. Онлайн, на русском или английском. Объясняю понятно — так, чтобы получалось в любом возрасте — от дошкольника до взрослого.</p>
     <div class="hero-cta">
       <a href="#contact" class="btn btn-primary">Записаться на бесплатный урок →</a>
-      <a href="#subjects" class="btn btn-ghost">Что можно изучать</a>
+      <a href="#subjects" class="btn btn-ghost">Чему я обучаю</a>
     </div>
+    <a class="hero-portfolio" href="https://www.behance.net/gallery/228284729/portfolio" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18"/></svg>Моё портфолио на Behance<svg class="ext" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
     <div class="hero-meta">
-      <div><div class="num">2,5 года</div><div class="lbl">преподаю в академии TOP</div></div>
+      <div><div class="num">3 года</div><div class="lbl">преподаю в академии TOP</div></div>
       <div><div class="num">3 направления</div><div class="lbl">код, дизайн и 3D-графика</div></div>
-      <div><div class="num">1-е занятие</div><div class="lbl">бесплатно — 30 мин, знакомство и план</div></div>
+      <button type="button" class="meta-btn" data-open="firstLesson" aria-haspopup="dialog"><div class="num">1-е занятие</div><div class="lbl">бесплатно — 30 мин</div><span class="meta-more">Что будет на уроке <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></span></button>
     </div>
   </div>
 </header>
@@ -494,7 +548,7 @@
         </div>
         <h3>Python и программирование</h3>
         <p>От первой строки кода до собственного проекта. Основы, логика, реальные задачи. Готовлю к школьной информатике и олимпиадам.</p>
-        <div class="tags"><span class="tag">С нуля</span><span class="tag">Школьникам</span><span class="tag">Взрослым</span></div>
+        <div class="tags"><span class="tag">С нуля</span><span class="tag">Детям</span><span class="tag">Взрослым</span></div>
       </div>
       <div class="subj dz reveal d1">
         <div class="subj-ico">
@@ -521,14 +575,14 @@
   <div class="wrap">
     <div class="sec-head">
       <div class="kicker">Почему со мной</div>
-      <h2>Не просто «знаю предмет» — умею научить</h2>
+      <h2>Не просто «знаю инструмент» — умею научить</h2>
       <p>Многие знают Python или Figma. Но объяснить так, чтобы зажечь и удержать интерес, — отдельный навык. Я легко нахожу общий язык с учениками любого возраста, и именно за это меня выбирают: со мной не скучно, не страшно ошибаться и видно результат.</p>
     </div>
     <div class="why-grid">
       <div class="why-card reveal">
         <span class="wemoji"><svg viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1 2.7 2.5 6 2.5s6-1.5 6-2.5v-5"/><path d="M22 10v6"/></svg></span>
         <h4>Действующий преподаватель</h4>
-        <p>2,5 года веду курсы в компьютерной академии TOP по дизайну, 3D, веб-разработке и программированию. Это моя ежедневная работа, а не хобби.</p>
+        <p>3 года веду курсы в компьютерной академии TOP по дизайну, 3D, веб-разработке и программированию. Это моя ежедневная работа, а не хобби.</p>
       </div>
       <div class="why-card reveal d1">
         <span class="wemoji"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="m9 14.5-2 6.5 5-3 5 3-2-6.5"/><path d="m12 6 1.2 2.4 2.6.4-1.9 1.8.4 2.6-2.3-1.2-2.3 1.2.4-2.6L9 8.8l2.6-.4L12 6Z"/></svg></span>
@@ -556,7 +610,8 @@
       <div class="step reveal">
         <div class="step-n">1</div>
         <h4>Бесплатное знакомство</h4>
-        <p>Созваниваемся на 30 минут, определяем твой уровень и цель, составляем понятный план занятий. Ни к чему не обязывает.</p>
+        <p>30 минут онлайн: знакомимся, определяем уровень и цель — и ты сразу пробуешь себя в программе. В конце — понятный план занятий. Ни к чему не обязывает.</p>
+        <button type="button" class="step-more" data-open="firstLesson" aria-haspopup="dialog">Подробнее о первом уроке <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
       </div>
       <div class="step reveal d1">
         <div class="step-n">2</div>
@@ -577,7 +632,7 @@
   <div class="wrap">
     <div class="sec-head">
       <div class="kicker">Стоимость</div>
-      <h2>Прозрачно и без сюрпризов</h2>
+      <h2>Прозрачно и без скрытых условий</h2>
     </div>
     <div class="price-wrap">
       <div class="price-card reveal">
@@ -607,7 +662,7 @@
     <div class="price-free-banner reveal">
       <div>
         <div class="big-free">Первый урок — бесплатно</div>
-        <p>Знакомство на 30 минут: определяем уровень, цель и план. Ты ничем не рискуешь и сам решаешь, продолжать ли. Работаю официально как самозанятый — чек после оплаты.</p>
+        <p>Знакомство на 30 минут: определяем уровень и цель, пробуешь себя в программе и получаешь план. Ты ничем не рискуешь и сам решаешь, продолжать ли. Работаю официально как самозанятый — чек после оплаты.</p>
       </div>
       <a href="#contact" class="btn btn-primary">Записаться →</a>
     </div>
@@ -672,7 +727,7 @@
         <div class="gcard placeholder"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 9v11"/></svg><span>Скоро здесь презентация</span></div>
       </div>
     </div>
-    <p class="gallery-note">Работы преподавателя и учеников. Хочешь так же? <a href="#contact">Начни с бесплатного занятия →</a></p>
+    <p class="gallery-note">Работы преподавателя и учеников. Мои работы — на <a href="https://www.behance.net/gallery/228284729/portfolio" target="_blank" rel="noopener">Behance →</a>. Хочешь так же? <a href="#contact">Начни с бесплатного занятия →</a></p>
   </div>
 </section>
 
@@ -730,6 +785,22 @@
   </div>
 </footer>
 
+<!-- FIRST LESSON (модалка «1-е занятие») -->
+<dialog class="fl" id="firstLesson" aria-labelledby="flTitle">
+  <button type="button" class="fl-close" data-close aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  <div class="fl-kicker">30 минут · онлайн · бесплатно</div>
+  <h3 id="flTitle">Что будет на первом уроке</h3>
+  <ul class="fl-list">
+    <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span><b>Познакомимся</b> — расскажешь, чем увлекаешься и чего хочешь добиться</span></li>
+    <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span><b>Определим уровень подготовки</b> — без экзаменов, в формате беседы и пары задач</span></li>
+    <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg><span><b>Выявим зоны роста и сильные стороны</b> — поймём, на что опираться и что подтянуть</span></li>
+    <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4M10 8.5l4 2-4 2v-4Z"/></svg><span><b>Попробуешь себя в программе</b> — сделаешь первые шаги в Python, Figma или Blender прямо на уроке</span></li>
+    <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4h6a1 1 0 0 1 1 1v1H8V5a1 1 0 0 1 1-1Z"/><path d="M16 5h2a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h2"/><path d="m9 13 2 2 4-4"/></svg><span><b>Составим индивидуальный план</b> дальнейшей работы — под твою цель и темп</span></li>
+  </ul>
+  <p class="fl-note">Ни к чему не обязывает: после урока ты сам решаешь, продолжать ли.</p>
+  <a href="#contact" class="btn btn-primary fl-cta" data-close>Записаться на бесплатный урок →</a>
+</dialog>
+
 <!-- LIGHTBOX (галерея) -->
 <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Просмотр работы" hidden>
   <button class="lb-close" aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
@@ -744,6 +815,15 @@
     entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
   },{threshold:.14, rootMargin:'0px 0px -40px 0px'});
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // First-lesson dialog
+  const fl = document.getElementById('firstLesson');
+  document.querySelectorAll('[data-open="firstLesson"]').forEach(b=>b.addEventListener('click', ()=>fl.showModal()));
+  fl.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click', ()=>fl.close()));
+  fl.addEventListener('click', e=>{ // close on a click outside the dialog box (on the backdrop)
+    const r = fl.getBoundingClientRect();
+    if(e.target === fl && (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom)) fl.close();
+  });
 
   // Gallery: tabs + horizontal track
   const tabs = [...document.querySelectorAll('.gtab')];

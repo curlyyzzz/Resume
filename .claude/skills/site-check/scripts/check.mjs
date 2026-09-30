@@ -6,7 +6,7 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
-import { execSync } from 'node:child_process';
+import { execSync, execFileSync } from 'node:child_process';
 
 const arg = (name, def) => { const i = process.argv.indexOf(name); return i > -1 ? process.argv[i + 1] : def; };
 const ROOT = path.resolve(arg('--root', '.'));
@@ -88,25 +88,56 @@ const server = http.createServer((req, res) => {
   fs.createReadStream(p).pipe(res);
 });
 await new Promise(r => server.listen(0, '127.0.0.1', r));
+
+// Google Fonts are fetched with curl (it honours the environment's proxy/CA) and cached, so text is measured
+// in the real Unbounded/Manrope — the fallback font is much narrower and hides overflow bugs.
+const FONT_UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36';
+const fontCache = new Map();
+let fontsFailed = 0;
+const fontRoute = async (route) => {
+  const url = route.request().url();
+  try {
+    if (!fontCache.has(url)) fontCache.set(url, execFileSync('curl', ['-sSfL', '--max-time', '20', '-A', FONT_UA, url], { maxBuffer: 20 << 20 }));
+    const type = url.includes('fonts.googleapis.com') ? 'text/css; charset=utf-8' : 'font/woff2';
+    await route.fulfill({ status: 200, body: fontCache.get(url), headers: { 'content-type': type, 'access-control-allow-origin': '*' } });
+  } catch { fontsFailed++; await route.abort(); }
+};
 const BASE = `http://127.0.0.1:${server.address().port}/`;
 
 const browser = await chromium.launch();
-for (const [label, vp] of [['desktop', { width: 1366, height: 860 }], ['mobile', { width: 390, height: 844 }]]) {
+for (const [label, vp] of [['desktop', { width: 1366, height: 860 }], ['mobile', { width: 390, height: 844 }], ['mobile-360', { width: 360, height: 740 }]]) {
   const page = await browser.newPage({ viewport: vp });
   const errors = [], bad = [];
   page.on('pageerror', e => errors.push(e.message));
   page.on('response', r => { if (r.url().startsWith(BASE) && r.status() >= 400) bad.push(`${r.status()} ${r.url().slice(BASE.length)}`); });
   // the page may open Telegram on submit — never navigate away during the check
   await page.addInitScript(() => { window.__opened = []; window.open = (u) => { window.__opened.push(u); return {}; }; });
-  await page.route(/^https?:\/\/(?!127\.0\.0\.1)/, r => r.abort()); // offline: no fonts/CDN, checks stay deterministic
+  await page.route(/^https?:\/\/(?!127\.0\.0\.1)/, r => r.abort()); // no other external requests: deterministic
+  await page.route(/^https:\/\/fonts\.(googleapis|gstatic)\.com\//, fontRoute);
   await page.goto(BASE + 'index.html', { waitUntil: 'load' });
   await page.evaluate(() => document.querySelectorAll('.reveal').forEach(e => e.classList.add('in')));
 
   const L = `[${label}]`;
+  const fontsLoaded = await page.evaluate(async () => { await document.fonts.ready; return [...document.fonts].filter(f => f.status === 'loaded').map(f => f.family.replace(/"/g, '')); });
+  new Set(fontsLoaded).size >= 2 ? ok(`${L} Фирменные шрифты загружены (${[...new Set(fontsLoaded)].join(', ')})`)
+    : warn(`${L} Шрифты Unbounded/Manrope не загрузились (curl недоступен?) — ширина текста проверена на запасном шрифте`);
   bad.length ? fail(`${L} Сервер вернул ошибки: ${bad.join(', ')}`) : ok(`${L} Все запросы к сайту успешны`);
 
   const scrollX = await page.evaluate(() => { window.scrollTo(9999, 0); const x = window.scrollX; window.scrollTo(0, 0); return x; });
   scrollX > 0 ? fail(`${L} Страница листается вбок на ${scrollX}px`) : ok(`${L} Нет горизонтальной прокрутки`);
+
+  // text that sticks out of the screen: body has overflow-x:hidden, so it is silently cut off instead of scrolling
+  const cut = await page.evaluate(() => {
+    const W = document.documentElement.clientWidth;
+    return [...document.querySelectorAll('h1,h2,h3,h4,p,li,a,button,label,.num,.lbl,.eyebrow,.tag,.amount')]
+      .filter(e => !e.closest('.gtrack,.gtabs,#lb,.blob') && e.offsetParent !== null)
+      // measure the text itself (a Range), not the box: a long word overflows its own block without widening it
+      .map(e => { const rg = document.createRange(); rg.selectNodeContents(e); return { e, right: Math.max(rg.getBoundingClientRect().right, e.getBoundingClientRect().right) }; })
+      .filter(x => x.right > W + 1)
+      .map(x => `${x.e.tagName.toLowerCase()}${x.e.className ? '.' + String(x.e.className).split(' ')[0] : ''} «${x.e.textContent.trim().slice(0, 30)}» (+${Math.round(x.right - W)}px)`)
+      .filter((v, i, a) => a.indexOf(v) === i).slice(0, 8);
+  });
+  cut.length ? fail(`${L} Текст вылезает за край экрана и обрезается: ${cut.join('; ')}`) : ok(`${L} Весь текст помещается по ширине экрана`);
 
   const nav = await page.evaluate(() => {
     const navEl = document.querySelector('nav'), cta = document.querySelector('.nav-cta'), logo = document.querySelector('nav .logo');
