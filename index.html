@@ -11,7 +11,7 @@
 <meta name="author" content="Артём Корыткин">
 <meta name="robots" content="index, follow">
 <meta name="language" content="Russian">
-<link rel="canonical" href="https://ЗАМЕНИ-НА-СВОЙ-ДОМЕН/">
+<link rel="canonical" href="https://curlyyzzz.github.io/Resume/">
 
 <!-- Open Graph (превью ссылки в Telegram, ВК, мессенджерах) -->
 <meta property="og:type" content="website">
@@ -19,8 +19,8 @@
 <meta property="og:title" content="Репетитор по Python, дизайну и 3D — с нуля до первого проекта">
 <meta property="og:description" content="Онлайн-занятия по Python, Figma и Blender для школьников и взрослых. Старший преподаватель IT-академии TOP. Первый урок бесплатно.">
 <meta property="og:locale" content="ru_RU">
-<meta property="og:url" content="https://ЗАМЕНИ-НА-СВОЙ-ДОМЕН/">
-<meta property="og:image" content="https://ЗАМЕНИ-НА-СВОЙ-ДОМЕН/assets/og-preview.png">
+<meta property="og:url" content="https://curlyyzzz.github.io/Resume/">
+<meta property="og:image" content="https://curlyyzzz.github.io/Resume/assets/og-preview.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 
@@ -28,7 +28,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Репетитор по Python, дизайну и 3D — с нуля до первого проекта">
 <meta name="twitter:description" content="Онлайн-занятия по Python, Figma и Blender. Первый урок бесплатно.">
-<meta name="twitter:image" content="https://ЗАМЕНИ-НА-СВОЙ-ДОМЕН/assets/og-preview.png">
+<meta name="twitter:image" content="https://curlyyzzz.github.io/Resume/assets/og-preview.png">
 
 <!-- Favicon (SVG-логотип, встроен ниже) -->
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
@@ -41,7 +41,7 @@
   "@type": "EducationalOrganization",
   "name": "Артём Корыткин — репетитор по Python, Figma и Blender",
   "description": "Индивидуальные онлайн-занятия по Python, дизайну в Figma и 3D-моделированию в Blender для школьников и взрослых.",
-  "url": "https://ЗАМЕНИ-НА-СВОЙ-ДОМЕН/",
+  "url": "https://curlyyzzz.github.io/Resume/",
   "email": "curlyyzzz@gmail.com",
   "areaServed": "RU",
   "availableLanguage": ["Russian", "English"],
@@ -297,8 +297,11 @@
   textarea{resize:vertical;min-height:80px}
   form .btn-primary{margin-top:6px;justify-content:center}
   .form-note{font-size:13px;color:var(--muted);text-align:center;margin-top:4px}
-  .ok-msg{display:none;padding:16px;border-radius:12px;background:rgba(34,211,238,.12);
-    border:1px solid rgba(34,211,238,.4);color:var(--cyan);font-weight:600;text-align:center}
+  .ok-msg{display:none;padding:16px 18px;border-radius:12px;background:rgba(34,211,238,.1);
+    border:1px solid rgba(34,211,238,.4);color:var(--ink);font-size:14.5px;line-height:1.55;text-align:center}
+  .ok-msg b{color:var(--cyan)}
+  .ok-msg span{display:block;margin-top:8px;color:var(--muted);font-size:13.5px}
+  .ok-msg a{color:var(--cyan);font-weight:600;text-decoration:underline;text-underline-offset:2px}
 
   /* ---------- FOOTER ---------- */
   footer{border-top:1px solid var(--card-brd);padding:34px 0;text-align:center;color:var(--muted);font-size:14px}
@@ -712,7 +715,7 @@
           <textarea id="msg" placeholder="Цель, уровень, удобное время — что угодно"></textarea>
           <button type="submit" class="btn btn-primary">Отправить заявку</button>
           <div class="form-note">Нажимая кнопку, ты соглашаешься на обработку данных для связи</div>
-          <div class="ok-msg" id="okMsg">Заявка принята! Свяжусь с тобой в ближайшее время ✨</div>
+          <div class="ok-msg" id="okMsg" role="status" aria-live="polite"><b>Почти готово!</b> Мы открыли Telegram с твоей заявкой — нажми там «Отправить», и я отвечу в течение дня.<span>Telegram не открылся? Напиши в <a href="https://wa.me/79778343933" target="_blank" rel="noopener">WhatsApp</a> или на <a href="mailto:curlyyzzz@gmail.com">curlyyzzz@gmail.com</a>.</span></div>
         </form>
       </div>
     </div>
@@ -836,7 +839,7 @@
     if(e.key === 'ArrowRight') lbShow(lbIndex+1);
   });
 
-  // Contact form — front-end only demo. Wire up to Telegram/email backend when hosting.
+  // Contact form — no backend yet: opens Telegram with a prefilled message the visitor sends themselves.
   const form = document.getElementById('leadForm');
   const okMsg = document.getElementById('okMsg');
   form.addEventListener('submit', function(e){
@@ -847,10 +850,12 @@
     const msg = document.getElementById('msg').value.trim();
     // Prefill a Telegram message so the lead can send it in one tap
     const text = `Здравствуйте! Хочу записаться на бесплатный урок.%0AИмя: ${encodeURIComponent(name)}%0AНаправление: ${encodeURIComponent(subj)}%0AСвязь: ${encodeURIComponent(contactm)}${msg ? '%0AКомментарий: '+encodeURIComponent(msg) : ''}`;
+    const url = `https://t.me/curlyyzzz?text=${text}`;
     okMsg.style.display = 'block';
-    form.querySelectorAll('input,select,textarea,button').forEach(el=>el.disabled=true);
-    // Open Telegram with prefilled text
-    window.open(`https://t.me/curlyyzzz?text=${text}`, '_blank');
+    form.querySelector('button[type=submit]').textContent = 'Открыть Telegram ещё раз';
+    // Open Telegram with prefilled text; if the popup is blocked, go there in this tab
+    const w = window.open(url, '_blank');
+    if (!w) window.location.href = url;
   });
 </script>
 </body>

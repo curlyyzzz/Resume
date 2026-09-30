@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /.claude/
+
+Sitemap: https://curlyyzzz.github.io/Resume/sitemap.xml
