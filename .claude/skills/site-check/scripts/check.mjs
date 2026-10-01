@@ -184,6 +184,27 @@ for (const [label, vp] of [['desktop', { width: 1366, height: 860 }], ['mobile',
     const closed = await page.locator('#lb').isHidden();
     opened && closed && media > 0 ? ok(`${L} Лайтбокс открывается и закрывается по Esc`) : fail(`${L} Лайтбокс: open=${opened} mediaWidth=${media} closedByEsc=${closed}`);
   }
+  // «1-е занятие» dialog: every trigger opens it, the button inside closes it, Esc closes it
+  const triggers = await page.locator('[data-open="firstLesson"]').count();
+  if (triggers) {
+    const res = [];
+    for (let i = 0; i < triggers; i++) {
+      const t = page.locator('[data-open="firstLesson"]').nth(i);
+      await t.scrollIntoViewIfNeeded();
+      await t.click();
+      const open = await page.evaluate(() => document.getElementById('firstLesson').open);
+      const inView = await page.evaluate(() => { const r = document.getElementById('firstLesson').getBoundingClientRect(); return r.top >= 0 && r.bottom <= innerHeight + 1 && r.width > 0; });
+      if (i === 0) { await page.waitForTimeout(400); await page.screenshot({ path: path.join(OUT, `first-lesson-${label}.png`) }); }
+      await page.keyboard.press('Escape');
+      const closed = await page.evaluate(() => !document.getElementById('firstLesson').open);
+      res.push(open && inView && closed);
+    }
+    await page.locator('[data-open="firstLesson"]').first().click();
+    await page.locator('#firstLesson .fl-cta').click();
+    const ctaOk = await page.evaluate(() => !document.getElementById('firstLesson').open && location.hash === '#contact');
+    res.every(Boolean) && ctaOk ? ok(`${L} Окно «1-е занятие»: открывается (${triggers} кнопки), помещается в экран, закрывается; «Записаться» ведёт к форме`)
+      : fail(`${L} Окно «1-е занятие» работает неправильно (по кнопкам: ${res.join(', ')}; «Записаться» → форма: ${ctaOk})`);
+  }
   await page.locator('#gallery').screenshot({ path: path.join(OUT, `gallery-${label}.png`) });
 
   // lead form: fills, submits, shows the message and opens a t.me link
